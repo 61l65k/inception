@@ -8,13 +8,16 @@ up:
 down:
 	@docker compose -f $(DOCKER_COMPOSE_FILE) down
 
+logs:
+	@docker compose -f $(DOCKER_COMPOSE_FILE) logs -f
+
 re: down up
 
 clean:
-	@docker stop $$(docker ps -qa) && \
-	docker rm $$(docker ps -qa) && \
-	docker rmi -f $$(docker images -qa) && \
-	docker volume rm $$(docker volume ls -q) && \
-	docker network rm $$(docker network ls -q)
+	(docker stop $$(docker ps -qa) || true) && \
+	(docker rm $$(docker ps -qa) || true) && \
+	(docker rmi -f $$(docker images -qa) || true) && \
+	(docker volume rm $$(docker volume ls -q) || true) && \
+	(docker network rm $$(docker network ls -q) || true)
 
 .PHONY: all up down re clean

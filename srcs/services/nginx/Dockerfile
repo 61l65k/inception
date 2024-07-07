@@ -1,14 +1,13 @@
 FROM debian:buster
 
+RUN apt -y update && \
+    apt install -y nginx openssl && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt -y update && apt install -y nginx && apt install openssl -y
+COPY ./default /etc/nginx/sites-available/default
 
+COPY ./entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
-
-COPY ./default /etc/nginx/sites-available/
-
-COPY ./booter.sh /
-
-
-CMD [ "/booter.sh" ]
-
+ENTRYPOINT ["/entrypoint.sh"]
