@@ -1,11 +1,64 @@
+volumes:
+  wordpress:
+    name: wordpress
+    driver: local
+    #driver_opts:
+    #  device: path
+    #  o: bind
+    #  type: none
+  mariadb:
+    name: mariadb
+    driver: local
+    # Uncomment these lines if you want to bind the volume to a specific path on your host
+    # driver_opts:
+    #   device: path
+    #   o: bind
+    #   type: none
+
+networks:
+  inception:
+    name: inception
+
 services:
   nginx:
     container_name: nginx
-    build: ./requirements/nginx
+    build: ./mandatorian/nginx/.
+    image: nginx:42
     ports:
-      - 443:443
+     - "443:443"
+    depends_on:
+      - wordpress
     volumes:
-      - wordpress_data:/var/www/html
-    restart: always
+     - wordpress:/var/www/html
     networks:
-      - network
+      - inception
+    env_file:
+      - .env
+    restart: always
+  wordpress:
+    container_name: wordpress
+    build: ./mandatorian/wordpress/.
+    image: wordpress:42
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+  mariadb:
+    container_name: mariadb
+    build: ./mandatorian/mariadb/.
+    image: mariadb:42
+    volumes:
+      - mariadb:/var/lib/mysql
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
+
+
+
