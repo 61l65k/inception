@@ -22,12 +22,12 @@ networks:
 services:
   nginx:
     container_name: nginx
-    build: ./mandatorian/nginx/.
+    build: ./services/nginx/.
     image: nginx:42
     ports:
      - "443:443"
-    depends_on:
-      - wordpress
+ #   depends_on:
+ #     - wordpress
     volumes:
      - wordpress:/var/www/html
     networks:
@@ -35,30 +35,30 @@ services:
     env_file:
       - .env
     restart: always
-  wordpress:
-    container_name: wordpress
-    build: ./mandatorian/wordpress/.
-    image: wordpress:42
-    depends_on:
-      - mariadb
-    volumes:
-      - wordpress:/var/www/html
-    env_file:
-      - .env
-    networks:
-      - inception
-    restart: always
-  mariadb:
-    container_name: mariadb
-    build: ./mandatorian/mariadb/.
-    image: mariadb:42
-    volumes:
-      - mariadb:/var/lib/mysql
-    env_file:
-      - .env
-    networks:
-      - inception
-    restart: always
+#  wordpress:
+#    container_name: wordpress
+#    build: ./services/wordpress/.
+#  	 image: wordpress:42
+#    depends_on:
+#      - mariadb
+#    volumes:
+#      - wordpress:/var/www/html
+#    env_file:
+#      - .env
+#    networks:
+#      - inception
+#    restart: always
+#  mariadb:
+#    container_name: mariadb
+#    build: ./services/mariadb/.
+#    image: mariadb:42
+#    volumes:
+#      - mariadb:/var/lib/mysql
+#    env_file:
+#      - .env
+#    networks:
+#      - inception
+#    restart: always
 
 
 
