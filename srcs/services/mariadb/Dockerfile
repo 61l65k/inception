@@ -1,15 +1,17 @@
-FROM debian:buster
+FROM debian:bullseye
 
-RUN apt-get update -y && \
-    apt-get install -y mariadb-server && \
-    apt-get clean && \
+EXPOSE 3306
+
+RUN apt update && \
+    apt install -y --no-install-recommends --no-install-suggests \
+    mariadb-server && \
+    mkdir -p /run/mysqld /var/lib/mysql && \
+    chown -R mysql:mysql /run/mysqld /var/lib/mysql && \
     rm -rf /var/lib/apt/lists/*
 
-COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+COPY 50-server.cnf /etc/mysql/mariadb.conf.d/
 
-RUN sed -i 's/^bind-address.*/bind-address = 0.0.0.0/' /etc/mysql/mariadb.conf.d/50-server.cnf
+COPY setup.sh /bin/
+RUN chmod +x /bin/setup.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
-
-CMD ["mysqld_safe"]
+CMD ["/bin/setup.sh", "mysqld_safe"]

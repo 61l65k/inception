@@ -5,8 +5,6 @@ RUN apt -y update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-COPY ./default /etc/nginx/sites-available/default
-
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
