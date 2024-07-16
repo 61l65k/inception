@@ -37,9 +37,17 @@ server {
         fastcgi_param PATH_INFO \$fastcgi_path_info;
     }
 
+    location /adminer {
+		fastcgi_index adminer.php;
+		include /etc/nginx/fastcgi_params;
+		fastcgi_param SCRIPT_FILENAME /var/www/html/adminer.php;
+		fastcgi_pass adminer:8080;
+	}
+
     location ~ /\.ht {
         deny all;
     }
+    
 }
 EOF
 
