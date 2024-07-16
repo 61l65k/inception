@@ -1,80 +1,49 @@
-User Request (HTTPS)
-         |
-         v
-+---------------------+
-|      Internet       |
-+---------------------+   
-         |
-       ROUTER 
-         |
-         |
-       COMPUTER
-         |
-         |                                  
-        UFW <----------------------21---------------------> +-----------container------------+
-         |                                                  |                                |
-         |                                                  |     FTP Server (vsftpd)        |
-         v                                                  |                                | 
-+-----container-------+                                     |                                |
-|                     |                                     |  Listens on port 21            |
-|       Nginx         |                                     |  Passive ports 21100-21110     |
-|   Port 443 (HTTPS)  |                                     +--------------------------------+
-|  (SSL termination)  |                                                     ^
-|                     |                                                     |
-+---------------------+ <------------------------------8080----------------------------> +--------container-------------+
-         |                                                                  |            |                              |
-         |                    +----container----+                           |            |  Adminer                     |
-         |                    |                 |                           |            |                              |
-         9                    |    Redis        |                           |            |  one file webui for mariadb  | 
-         0<-------6379------->|                 |                           |            |                              | 
-         0                    |    Cache DB     |                           |            +------------------------------+
-         0                    |                 |                           |                           |
-         |                    |                 |                           |                           |
-         v                    +-----------------+                           |                           |
-+-------container------+                                                    |                           |
-|                      |            +------volume--------+                  |                           |
-|    WordPress         |            |                    |                  |                           |
-|                      |<---------->| wordpress volume   |<------------------                           | 
-|    PHP-FPM: 9000     |            | www/html (website) |                                              |
-|                      |            +--------------------+ -- (attached to host remembering)            |     
-+----------------------+                                                                                |
-         ^                                                                                              |
-         |                                                                                              | 
-         |                                                                                              |
-         3                                                                                              |
-         3                                                                                              | 
-         0                                                                                              |
-         6         --------------------------------3306-------------------------------------------------|
-         |         |                                                                                     
-         |         |                                                                                     
-         v         v                                                                                            
-+------container------+            +------volume-----+         
-|                     |            |                 |
-|      MariaDB        |<---------->| mariadb volume  |    
-|                     |            |                 |    
-+---------------------+            +-----------------+ -- (attached to host remembering)
-                               
+## Inception Project
 
-Actual Network: Nginx, FTP                               
-Docker network: WordPress, Redis, MariaDB
-                               
-                               
+## Overview
 
+This project demonstrates a multi-container Docker setup for serving a WordPress website with improved performance and management capabilities. Key components include Nginx, WordPress, Redis, MariaDB, an FTP server, and Adminer.
 
+## Components
 
+1. **Nginx (SSL Termination and Reverse Proxy):**
+   - Listens on port 443 (HTTPS) and handles SSL termination.
+   - Proxies requests to the appropriate backend services within the Docker network.
 
-check that redis is being used in the container and stores keys
+2. **WordPress (PHP-FPM):**
+   - Runs the WordPress site and handles PHP processing.
+   - Uses PHP-FPM to process PHP files.
+   - Volume attached to the host for persistent storage.
+
+3. **Redis (Caching):**
+   - Acts as a caching layer to reduce database queries and improve performance.
+   - Stores frequently accessed data for quick retrieval.
+
+4. **MariaDB (Database):**
+   - Serves as the database for the WordPress site.
+   - Volume attached to the host for persistent storage.
+
+5. **FTP Server:**
+   - Allows modification of WordPress website files.
+   - Runs on localhost:21 and uses passive ports 21100-21110.
+   - Volume attached to the host for persistent storage.
+
+6. **Adminer:**
+   - A lightweight web-based database management tool.
+   - Provides an interface to manage the MariaDB database.
+   - Accessible through the Nginx reverse proxy.
+
+7. **Static Website:**
+   - Serves static content from a dedicated container.
+   - Handled by Nginx for serving static assets efficiently.
+
+## Usage
+
+### Check Redis Keys
+To verify that Redis is being used and storing keys:
 ```bash
 docker exec -it wordpress-redis redis-cli
 KEYS *
-
-
 ```
 
-connect ot ftp server running on localhost:21  user.42.fr
-
-
-adminer and worpress and etc needs the php-fpm interpreter
-since php is server side script language like python 
-
-and the end user receives the content as html css javascript and the browsers interpreter handles that execution
+![overview](assets/inceppari.png)
