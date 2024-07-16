@@ -41,6 +41,4 @@ RUN wp core download --allow-root
 COPY ./tools/entrypoint.sh /usr/local/bin/
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
-COPY ./conf/wp-config.php /var/www/html/wp-config.php
-
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]

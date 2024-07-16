@@ -16,7 +16,7 @@ wait_for_mysql() {
         sleep "$wait"
         echo -n "."
     done
-
+    sleep 10
     echo -e "\nMariaDB is up and running!"
 }
 
