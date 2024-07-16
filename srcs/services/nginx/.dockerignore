@@ -1,0 +1,4 @@
+# Ignore everything except Dockerfile and entrypoint.sh
+*
+!Dockerfile
+!entrypoint.sh

@@ -1,0 +1,7 @@
+# Ignore everything except Dockerfile, conf, and tools
+*
+!Dockerfile
+!conf/
+!conf/**
+!tools/
+!tools/**
