@@ -5,7 +5,7 @@ set -e
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/ssl/private/nginx-selfsigned.key \
     -out /etc/ssl/certs/nginx-selfsigned.crt \
-    -subj "/C=FI/L=HEL/O=Hive/OU=student/CN=apyykone.42.fr"
+    -subj "/C=FI/L=HEL/O=Hive/OU=42Helsinki/CN=apyykone.42.fr"
 
 # Note: Typically, we would redirect all requests to HTTP (port 80) to HTTPS (port 443)
 cat <<EOF > /etc/nginx/sites-available/default

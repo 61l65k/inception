@@ -23,7 +23,7 @@ networks:
 services:
   nginx:
     container_name: nginx
-    build: ./services/nginx/.
+    build: ./requirements/nginx/.
     image: nginx:42
     ports:
      - "443:443"
@@ -36,9 +36,10 @@ services:
     env_file:
       - .env
     restart: on-failure
+
   wordpress:
     container_name: wordpress
-    build: ./services/wordpress/.
+    build: ./requirements/wordpress/.
     image: wordpress:42
     expose:
       - "9000"
@@ -51,11 +52,12 @@ services:
     networks:
       - inception
     restart: on-failure
+ 
   mariadb:
     container_name: mariadb
     expose:
       - "3306"
-    build: ./services/mariadb/.
+    build: ./requirements/mariadb/.
     image: mariadb:42
     volumes:
       - mariadb:/var/lib/mysql
@@ -64,3 +66,17 @@ services:
     networks:
       - inception
     restart: on-failure
+
+  # bonus
+  redis:
+    container_name: wordpress-redis
+    build: requirements/bonus/redis
+    image: redis
+    expose:
+      - "6379"
+    networks:
+      - inception
+  #adminer:
+  #  container_name: adminer
+  #  build: requirements/bonus/adminer
+  #  image: adminer

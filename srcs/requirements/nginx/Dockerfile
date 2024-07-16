@@ -8,4 +8,8 @@ RUN apt -y update && \
 COPY ./entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
+# Create symbolic links for logs
+RUN ln -sf /dev/stdout /var/log/nginx/access.log
+RUN ln -sf /dev/stderr /var/log/nginx/error.log
+
 ENTRYPOINT ["/entrypoint.sh"]

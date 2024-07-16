@@ -48,6 +48,7 @@ setup_wp_config() {
     wp config set WP_CACHE true --allow-root
 }
 
+# Bonus -- connect to Redis container
 install_activate_plugins() {
     echo "Installing and activating plugins..."
     wp plugin install redis-cache --allow-root
@@ -66,9 +67,9 @@ set_permissions() {
 
 install_activate_theme() {
     echo "Installing and activating theme..."
-    wp theme install twentyfifteen --allow-root
-    wp theme activate twentyfifteen --allow-root
-    wp theme update twentyfifteen --allow-root
+    wp theme install astra --allow-root
+    wp theme activate astra --allow-root
+    wp theme update astra --allow-root
 }
 
 main() {
