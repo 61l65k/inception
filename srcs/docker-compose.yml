@@ -67,16 +67,36 @@ services:
       - inception
     restart: on-failure
 
-  # bonus
+  # BONUS SERVICES ----------------------------------------------
+
+  # Redis caches data and reduces the number of database queries
   redis:
-    container_name: wordpress-redis
+    container_name: redis
     build: requirements/bonus/redis
     image: redis
     expose:
       - "6379"
     networks:
       - inception
+    restart: on-failure
+  
+  ftp-server:
+    container_name: ftp-server
+    build: requirements/bonus/ftp
+    image: ftp
+    ports:
+      - "21:21" # FTP control port for command connections
+      - "21100-21110:21100-21110"  # FTP passive ports for data connections
+    volumes:
+      - wordpress:/var/www/html
+    env_file:
+      - .env
+    networks:
+      - inception
+    restart: always
   #adminer:
   #  container_name: adminer
   #  build: requirements/bonus/adminer
   #  image: adminer
+
+  

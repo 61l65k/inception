@@ -38,7 +38,7 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
 # Download WordPress
 RUN wp core download --allow-root
 
-COPY ./tools/entrypoint.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/entrypoint.sh
+COPY ./tools/wp-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/wp-entrypoint.sh
 
-ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+ENTRYPOINT ["/usr/local/bin/wp-entrypoint.sh"]
