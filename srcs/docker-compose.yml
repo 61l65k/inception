@@ -45,6 +45,7 @@ services:
       - "9000"
     depends_on:
       - mariadb
+      - redis
     volumes:
       - wordpress:/var/www/html
     env_file:
@@ -73,17 +74,18 @@ services:
   redis:
     container_name: redis
     build: requirements/bonus/redis
-    image: redis
+    image: redis:42
     expose:
       - "6379"
     networks:
       - inception
     restart: on-failure
   
+  # FTP server for modificating the wordpress website files
   ftp-server:
     container_name: ftp-server
     build: requirements/bonus/ftp
-    image: ftp
+    image: ftp:42
     ports:
       - "21:21" # FTP control port for command connections
       - "21100-21110:21100-21110"  # FTP passive ports for data connections
@@ -93,10 +95,15 @@ services:
       - .env
     networks:
       - inception
-    restart: always
-  #adminer:
-  #  container_name: adminer
-  #  build: requirements/bonus/adminer
-  #  image: adminer
+    restart: on-failure
 
-  
+  # Adminer webui for managing db, works top of mariadb
+  adminer:
+    container_name: adminer
+    build: requirements/bonus/adminer
+    image: adminer:42
+    ports:
+      - "8080:8080"
+    networks:
+      - inception
+    restart: on-failure

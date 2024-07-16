@@ -69,3 +69,9 @@ KEYS *
 ```
 
 connect ot ftp server running on localhost:21  user.42.fr
+
+
+adminer and worpress and etc needs the php-fpm interpreter
+since php is server side script language like python 
+
+and the end user receives the content as html css javascript and the browsers interpreter handles that execution
