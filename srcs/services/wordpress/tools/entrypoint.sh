@@ -2,8 +2,22 @@
 set -e
 
 wait_for_mysql() {
-    echo "Waiting for MySQL to start..."
-    sleep 10
+    echo "Waiting for MariaDB to start..."
+    local retries=30
+    local wait=1
+    local count=0
+
+    until nc -z -v -w30 mariadb 3306; do
+        count=$((count + 1))
+        if [ "$count" -ge "$retries" ]; then
+            echo -e "\nMariaDB did not start within the expected time. Exiting."
+            exit 1
+        fi
+        sleep "$wait"
+        echo -n "."
+    done
+
+    echo -e "\nMariaDB is up and running!"
 }
 
 create_wp_config() {
@@ -31,8 +45,6 @@ setup_wp_config() {
     echo "Setting up WordPress configuration..."
     wp config set WP_DEBUG true --allow-root
     wp config set FORCE_SSL_ADMIN false --allow-root
-    #wp config set WP_REDIS_HOST "redis" --allow-root
-    #wp config set WP_REDIS_PORT 6379 --allow-root
     wp config set WP_CACHE true --allow-root
 }
 
@@ -40,12 +52,16 @@ install_activate_plugins() {
     echo "Installing and activating plugins..."
     wp plugin install redis-cache --allow-root
     wp plugin activate redis-cache --allow-root
+    wp config set WP_REDIS_HOST "redis" --allow-root
+    wp config set WP_REDIS_PORT 6379 --allow-root
     wp redis enable --allow-root
 }
 
 set_permissions() {
     echo "Setting permissions..."
-    chmod 777 /var/www/html/wp-content
+    chown -R www-data:www-data /var/www/html
+    find /var/www/html -type d -exec chmod 755 {} \;
+    find /var/www/html -type f -exec chmod 644 {} \;
 }
 
 install_activate_theme() {
@@ -64,7 +80,7 @@ main() {
         install_wordpress
         create_wp_user
         setup_wp_config
-        #install_activate_plugins
+        install_activate_plugins
         set_permissions
         install_activate_theme
     fi
@@ -73,5 +89,4 @@ main() {
     /usr/sbin/php-fpm8.1 -F
 }
 
-# Run the main function
 main

@@ -20,4 +20,8 @@ clean:
 	(docker volume rm $$(docker volume ls -q) || true) && \
 	(docker network rm $$(docker network ls -q) || true)
 
+clean-local-volumes:
+	(rm -rf ../data/wordpress-volume/* || true) && \
+	(rm -rf ../data/mariadb-volume/* || true)
+
 .PHONY: all up down re clean

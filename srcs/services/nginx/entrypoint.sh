@@ -5,24 +5,15 @@ set -e
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout /etc/ssl/private/nginx-selfsigned.key \
     -out /etc/ssl/certs/nginx-selfsigned.crt \
-    -subj "/C=FI/L=HEL/O=Hive/OU=student/CN=apyykone.42.fi"
+    -subj "/C=FI/L=HEL/O=Hive/OU=student/CN=apyykone.42.fr"
 
-# Generate server block for WP with redirection from HTTP to HTTPS
+# Note: Typically, we would redirect all requests to HTTP (port 80) to HTTPS (port 443)
 cat <<EOF > /etc/nginx/sites-available/default
-server {
-    listen 80;
-    listen [::]:80;
-
-    server_name www.apyykone.42.fi apyykone.42.fi;
-
-    return 301 https://\$host\$request_uri;
-}
-
 server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name www.apyykone.42.fi apyykone.42.fi;
+    server_name www..42.fr apyykone.42.fr;
 
     ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
     ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;

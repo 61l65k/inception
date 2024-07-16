@@ -1,23 +1,24 @@
 volumes:
   wordpress:
-    name: wordpress
     driver: local
-    #driver_opts:
-    #  device: path
-    #  o: bind
-    #  type: none
+    name: wordpress-volume
+    driver_opts:
+      device: ~/data/wordpress-volume
+      o: bind
+      type: none
+
   mariadb:
-    name: mariadb
     driver: local
-    # Uncomment these lines if you want to bind the volume to a specific path on your host
-    # driver_opts:
-    #   device: path
-    #   o: bind
-    #   type: none
+    name: mariadb-volume
+    driver_opts:
+      device: ~/data/mariadb-volume
+      o: bind
+      type: none
 
 networks:
   inception:
     driver: bridge
+    name: inception
 
 services:
   nginx:
@@ -34,7 +35,7 @@ services:
       - inception
     env_file:
       - .env
-    restart: always
+    restart: on-failure
   wordpress:
     container_name: wordpress
     build: ./services/wordpress/.
@@ -49,7 +50,7 @@ services:
       - .env
     networks:
       - inception
-    restart: always
+    restart: on-failure
   mariadb:
     container_name: mariadb
     expose:
@@ -62,7 +63,4 @@ services:
       - .env
     networks:
       - inception
-    restart: always
-
-
-
+    restart: on-failure

@@ -1,7 +1,5 @@
 FROM debian:bullseye
 
-EXPOSE 3306
-
 RUN apt update && \
     apt install -y --no-install-recommends --no-install-suggests \
     mariadb-server && \
@@ -9,9 +7,9 @@ RUN apt update && \
     chown -R mysql:mysql /run/mysqld /var/lib/mysql && \
     rm -rf /var/lib/apt/lists/*
 
-COPY 50-server.cnf /etc/mysql/mariadb.conf.d/
+COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
-COPY setup.sh /bin/
+COPY ./tools/setup.sh /bin/
 RUN chmod +x /bin/setup.sh
 
 CMD ["/bin/setup.sh", "mysqld_safe"]
