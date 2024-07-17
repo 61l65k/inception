@@ -41,8 +41,13 @@ server {
 		fastcgi_index adminer.php;
 		include /etc/nginx/fastcgi_params;
 		fastcgi_param SCRIPT_FILENAME /var/www/html/adminer.php;
-		fastcgi_pass adminer:8080;
+		fastcgi_pass adminer:6666;
 	}
+
+    #location  ^~ /static {
+    #    include         /etc/nginx/proxy_params;
+    #    proxy_pass      http://alex-static:6969/;
+    #}
 
     location ~ /\.ht {
         deny all;

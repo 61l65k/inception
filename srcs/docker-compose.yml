@@ -70,7 +70,6 @@ services:
 
   # BONUS SERVICES ----------------------------------------------
 
-  # Redis caches data and reduces the number of database queries
   redis:
     container_name: redis
     build: requirements/bonus/redis
@@ -81,7 +80,6 @@ services:
       - inception
     restart: on-failure
   
-  # FTP server for modificating the wordpress website files
   ftp-server:
     container_name: ftp-server
     build: requirements/bonus/ftp
@@ -97,13 +95,22 @@ services:
       - inception
     restart: on-failure
 
-  # Adminer webui for managing db, works top of mariadb
   adminer:
     container_name: adminer
     build: requirements/bonus/adminer
     image: adminer:42
     expose:
       - "8080"
+    networks:
+      - inception
+    restart: on-failure
+
+  alex-static:
+    container_name: alex-static
+    build: requirements/bonus/alex-static
+    image: alex-static:42
+    expose:
+      - "6969"
     networks:
       - inception
     restart: on-failure

@@ -87,7 +87,7 @@ main() {
     fi
 
     echo -e "Starting PHP-FPM...\n"
-    /usr/sbin/php-fpm8.1 -F
+    /usr/sbin/php-fpm7.4 -F
 }
 
 main

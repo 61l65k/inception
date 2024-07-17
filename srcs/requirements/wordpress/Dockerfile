@@ -1,30 +1,23 @@
-FROM ubuntu:22.04
+FROM debian:bullseye
 
 # Set noninteractive frontend for apt-get
 ENV DEBIAN_FRONTEND=noninteractive
 
 # Install required packages
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
-        php-fpm \
-        php-mysql \
-        php-zip \
-        php-redis \
-        curl \
-        vim \
-        sendmail \
-        netcat \
-        wget && \
-    mkdir -p /run/php
+RUN apt-get update && apt-get install -y \
+    php7.4 php7.4-mysql php7.4-fpm php7.4-curl php7.4-gd \
+    php7.4-intl php7.4-mbstring php7.4-soap php7.4-xml netcat \
+    php7.4-xmlrpc php7.4-zip wget mariadb-client php7.4-redis curl \
+    && rm -rf /var/lib/apt/lists/*
 
-# PHP-FPM configuration
-COPY ./conf/www.conf /etc/php/8.1/fpm/pool.d/www.conf
-COPY ./tools/configure-php-fpm.sh /usr/local/bin/
-RUN chmod +x /usr/local/bin/configure-php-fpm.sh && /usr/local/bin/configure-php-fpm.sh
+# Create the /run/php directory
+RUN mkdir -p /run/php && chown -R www-data:www-data /run/php
 
 # Reset DEBIAN_FRONTEND to default
 ENV DEBIAN_FRONTEND=dialog
+
+# PHP-FPM configuration
+COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
 
 # WP working dir with correct permissions
 WORKDIR /var/www/html
