@@ -44,10 +44,10 @@ server {
 		fastcgi_pass adminer:6666;
 	}
 
-    #location  ^~ /static {
-    #    include         /etc/nginx/proxy_params;
-    #    proxy_pass      http://alex-static:6969/;
-    #}
+    location  ^~ /static {
+        include         /etc/nginx/proxy_params;
+        proxy_pass      http://static-caddy:6969/;
+    }
 
     location ~ /\.ht {
         deny all;

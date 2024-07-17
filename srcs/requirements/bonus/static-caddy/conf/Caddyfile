@@ -1,0 +1,4 @@
+:6969 {
+    root * /usr/share/caddy
+    file_server
+}

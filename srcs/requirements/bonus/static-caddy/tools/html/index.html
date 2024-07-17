@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkerino</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .category {
+            margin: 20px 0;
+        }
+        .category h2 {
+            cursor: pointer;
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 0;
+        }
+        .links {
+            display: none;
+            padding: 0;
+            margin: 10px 0 0;
+            list-style: none;
+            text-align: left;
+        }
+        .links a {
+            display: block;
+            margin: 5px 0;
+            color: #007BFF;
+            text-decoration: none;
+        }
+        .links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Linkerino</h1>
+    </header>
+    <div class="container">
+        <div class="category">
+            <h2 onclick="toggleLinks('movies')">Movies</h2>
+            <ul id="movies" class="links">
+                <li><a href="https://www.imdb.com/" target="_blank">IMDb - Movies, TV and Celebrities</a></li>
+                <li><a href="https://www.rottentomatoes.com/" target="_blank">Rotten Tomatoes - Movie Reviews and Ratings</a></li>
+            </ul>
+        </div>
+        <div class="category">
+            <h2 onclick="toggleLinks('streaming')">Streaming Services</h2>
+            <ul id="streaming" class="links">
+                <li><a href="https://www.netflix.com/" target="_blank">Netflix - Watch TV Shows Online, Watch Movies Online</a></li>
+                <li><a href="https://www.hulu.com/" target="_blank">Hulu - Stream TV and Movies Live and Online</a></li>
+                <li><a href="https://www.disneyplus.com/" target="_blank">Disney+ - Stream Disney, Marvel, Pixar, Star Wars, National Geographic</a></li>
+            </ul>
+        </div>
+        <div class="category">
+            <h2 onclick="toggleLinks('databases')">Databases</h2>
+            <ul id="databases" class="links">
+                <li><a href="https://www.themoviedb.org/" target="_blank">The Movie Database (TMDb)</a></li>
+                <li><a href="https://www.tvmaze.com/" target="_blank">TVmaze - TV Show Database</a></li>
+            </ul>
+        </div>
+        <div class="category">
+            <h2 onclick="toggleLinks('subtitles')">Subtitles</h2>
+            <ul id="subtitles" class="links">
+                <li><a href="https://www.opensubtitles.org/" target="_blank">OpenSubtitles</a></li>
+                <li><a href="https://subscene.com/" target="_blank">Subscene - Subtitles for Movies and TV Shows</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function toggleLinks(categoryId) {
+            var links = document.getElementById(categoryId);
+            if (links.style.display === "none") {
+                links.style.display = "block";
+            } else {
+                links.style.display = "none";
+            }
+        }
+    </script>
+</body>
+</html>

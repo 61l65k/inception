@@ -100,15 +100,18 @@ services:
     build: requirements/bonus/adminer
     image: adminer:42
     expose:
-      - "8080"
+      - "6666"
     networks:
       - inception
     restart: on-failure
 
-  alex-static:
-    container_name: alex-static
-    build: requirements/bonus/alex-static
-    image: alex-static:42
+  static-caddy:
+    container_name: static-caddy
+    build:
+      context: ./requirements/bonus/static-caddy
+    image: static-caddy:42
+    volumes:
+      - ./requirements/bonus/static-caddy/tools/html:/usr/share/caddy
     expose:
       - "6969"
     networks:
