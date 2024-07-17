@@ -46,4 +46,5 @@ docker exec -it wordpress-redis redis-cli
 KEYS *
 ```
 
+### Messy pic but you get the point :D
 ![overview](assets/inceppari.png)

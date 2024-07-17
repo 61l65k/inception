@@ -1,5 +1,5 @@
 volumes:
-  wordpress:
+  wordpress-volume:
     driver: local
     name: wordpress-volume
     driver_opts:
@@ -7,11 +7,19 @@ volumes:
       o: bind
       type: none
 
-  mariadb:
+  mariadb-volume:
     driver: local
     name: mariadb-volume
     driver_opts:
       device: ~/data/mariadb-volume
+      o: bind
+      type: none
+    
+  portainer-volume:
+    driver: local
+    name: portainer-volume
+    driver_opts:
+      device: ~/data/portainer-volume
       o: bind
       type: none
 
@@ -30,7 +38,7 @@ services:
     depends_on:
       - wordpress
     volumes:
-     - wordpress:/var/www/html
+     - wordpress-volume:/var/www/html
     networks:
       - inception
     env_file:
@@ -47,7 +55,7 @@ services:
       - mariadb
       - redis
     volumes:
-      - wordpress:/var/www/html
+      - wordpress-volume:/var/www/html
     env_file:
       - .env
     networks:
@@ -61,7 +69,7 @@ services:
     build: ./requirements/mariadb/.
     image: mariadb:42
     volumes:
-      - mariadb:/var/lib/mysql
+      - mariadb-volume:/var/lib/mysql
     env_file:
       - .env
     networks:
@@ -88,7 +96,7 @@ services:
       - "21:21" # FTP control port for command connections
       - "21100-21110:21100-21110"  # FTP passive ports for data connections
     volumes:
-      - wordpress:/var/www/html
+      - wordpress-volume:/var/www/html
     env_file:
       - .env
     networks:
@@ -113,7 +121,22 @@ services:
     volumes:
       - ./requirements/bonus/static-caddy/tools/html:/usr/share/caddy
     expose:
-      - "6969"
+      - "80"
     networks:
       - inception
     restart: on-failure
+  
+  portainer:
+    container_name: portainer
+    build:
+      context: ./requirements/bonus/portainer
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - portainer-volume:/data
+    expose:
+      - "9000"
+    networks:
+      - inception
+    env_file:
+      - .env
+    restart: always

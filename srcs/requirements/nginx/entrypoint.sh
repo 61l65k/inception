@@ -13,12 +13,14 @@ server {
     listen 443 ssl;
     listen [::]:443 ssl;
 
-    server_name www..42.fr apyykone.42.fr;
+    server_name www.42.fr apyykone.42.fr;
 
     ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
     ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
 
     ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers on;
+    ssl_ciphers HIGH:!aNULL:!MD5;
 
     index index.php index.html;
     root /var/www/html;
@@ -38,23 +40,36 @@ server {
     }
 
     location /adminer {
-		fastcgi_index adminer.php;
-		include /etc/nginx/fastcgi_params;
-		fastcgi_param SCRIPT_FILENAME /var/www/html/adminer.php;
-		fastcgi_pass adminer:6666;
-	}
+        try_files \$uri \$uri/ /adminer.php?\$args;
+        fastcgi_pass adminer:6666;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
+        fastcgi_param PATH_INFO \$fastcgi_path_info;
+        fastcgi_index index.php;
+    }
+    location /portainer/ {
+        proxy_pass http://portainer:9000/;
+        proxy_set_header Host \$host;
+        proxy_set_header X-Real-IP \$remote_addr;
+        proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto \$scheme;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade \$http_upgrade;
+        proxy_set_header Connection "upgrade";
+    }
 
-    location  ^~ /static {
-        include         /etc/nginx/proxy_params;
-        proxy_pass      http://static-caddy:6969/;
+    location ^~ /static {
+        include /etc/nginx/proxy_params;
+        proxy_pass http://static-caddy:80/;
     }
 
     location ~ /\.ht {
         deny all;
     }
-    
 }
 EOF
+
+
 
 if [ ! -L /etc/nginx/sites-enabled/default ]; then
     ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
