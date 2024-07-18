@@ -34,14 +34,14 @@ setup_minimal_desktop_gui()
 
 setup_dns_to_local()
 {
-    sudo echo "127.0.0.1 $USER" >> /etc/hosts
+    sudo echo "127.0.0.1 $USER.42.fr" >> /etc/hosts
 }
 
 
 main()
 {
-    echo "Run this script as root user press enter to continue"
-    echo "This script will setup the docker for you and install minimal desktop GUI and setup DNS to local"
+    echo -e "This script will setup the docker for you and install minimal desktop GUI and setup DNS to local\n\n"
+    echo "Run this script as root user press enter to continue ..."
     read
     setup_docker
     read -p "Do you want to install minimal desktop GUI? [y/n]: " install_gui
@@ -50,3 +50,5 @@ main()
     fi
     setup_dns_to_local
 }
+
+main
