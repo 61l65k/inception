@@ -27,8 +27,6 @@ clean:
 	@docker network rm $$(docker network ls -q) || true
 
 clean-local-volumes:
-	@rm -rf $(DATA_DIR)/wordpress-volume/* || true
-	@rm -rf $(DATA_DIR)/mariadb-volume/* || true
-	@rm -rf $(DATA_DIR)/portainer-volume/* || true
+	@rm -rf ~/data
 
 .PHONY: all up down re clean clean-local-volumes check-directories
