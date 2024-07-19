@@ -45,6 +45,10 @@ To verify that Redis is being used and storing keys:
 docker exec -it wordpress-redis redis-cli
 KEYS *
 ```
-
+### Tell you host to trust your self signed certs.
+```bash
+sudo docker cp nginx:/etc/ssl/certs/nginx-selfsigned.crt  /usr/local/share/ca-certificates/selfsigned.crt
+sudo update-ca-certificates
+```
 ### Messy pic but you get the point :D
 ![overview](assets/inceppari.png)

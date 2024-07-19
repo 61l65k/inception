@@ -12,4 +12,4 @@ COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 COPY ./tools/setup.sh /bin/
 RUN chmod +x /bin/setup.sh
 
-CMD ["/bin/setup.sh", "mysqld_safe"]
+ENTRYPOINT ["/bin/setup.sh"]
